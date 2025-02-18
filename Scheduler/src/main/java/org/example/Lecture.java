@@ -2,8 +2,11 @@ package org.example;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 
 public class Lecture {
+    private static ArrayList<String> modules = new ArrayList<>();
+
     private String module;
     private LocalDate date;    // e.g., "2025-02-14"
     private LocalTime time;    // e.g., "10:00"
@@ -13,7 +16,18 @@ public class Lecture {
     }
 
     public Lecture(String module, LocalDate date, LocalTime time, String room) {
-        this.module = module;
+        if (modules.size() >= 5) {  // Prevents adding more than 5 modules
+            throw new IllegalArgumentException("Maximum of 5 modules allowed.");
+        }
+        if (!modules.contains(module)) { // Check if module is unique
+            this.module = module;
+            modules.add(module);
+            System.out.println(module + " added!");
+            System.out.println("Current module count: " + modules.size());  // Debugging line
+
+        } else {
+            throw new IllegalArgumentException("Module already exists.");
+        }
         this.date = date;
         this.time = time;
         this.room = room;

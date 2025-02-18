@@ -29,7 +29,7 @@ public class TimetableApp extends Application {
         DatePicker datePicker = new DatePicker(); // For selecting the lecture date
 
         TextField timeField = new TextField();
-        timeField.setPromptText("Time (HH:mm)");
+        timeField.setPromptText("Time (HH:mm) E.g 12:00");
 
         TextField roomField = new TextField();
         roomField.setPromptText("Room (e.g., Room 101)");
@@ -45,6 +45,7 @@ public class TimetableApp extends Application {
                 LocalTime time = LocalTime.parse(timeField.getText());
                 String room = roomField.getText();
 
+                // No need to handle incorrect time format here as it is handled separately
                 if (module.isEmpty() || date == null || room.isEmpty()) {
                     statusLabel.setText("Please fill all fields.");
                     return;
@@ -55,6 +56,7 @@ public class TimetableApp extends Application {
                 statusLabel.setText("Lecture added successfully!");
 
                 // Clear fields after adding
+                // Allows for user to possibly add another lecture in succession
                 moduleField.clear();
                 timeField.clear();
                 roomField.clear();
