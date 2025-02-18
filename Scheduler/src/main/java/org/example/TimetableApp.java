@@ -2,11 +2,13 @@ package org.example;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -15,6 +17,7 @@ import java.time.LocalTime;
 
 public class TimetableApp extends Application {
     private Timetable timetable = new Timetable(); // Instance of the timetable
+    private Stage primaryStage;
 
     public static void main(String[] args) {
         launch(args);
@@ -22,15 +25,42 @@ public class TimetableApp extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        // UI Components
-        TextField moduleField = new TextField();
-        moduleField.setPromptText("Module (e.g., CS101)");
+        this.primaryStage = primaryStage;
+        showWelcomeScreen();
+    }
 
+    private void showWelcomeScreen(){
+        Label welcomeLabel = new Label("Welcome to the Lecture Timetable App");
+        Button startButton = new Button("Start");
+
+        startButton.setOnAction(e -> showMainScreen());
+
+        VBox layout = new VBox(20);
+        layout.setPadding(new Insets(20));
+        layout.setAlignment(Pos.CENTER);
+        layout.getChildren().addAll(welcomeLabel, startButton);
+
+        Scene welcomeScene = new Scene(layout, 500, 400);
+        primaryStage.setScene(welcomeScene);
+        primaryStage.setTitle("Welcome");
+        primaryStage.show();
+    }
+
+
+    private void showMainScreen(){
+        // UI Components
+        Label moduleLabel = new Label("Module:");
+        TextField moduleField = new TextField();
+        moduleField.setPromptText("e.g., CS101");
+
+        Label dateLabel = new Label("Date:");
         DatePicker datePicker = new DatePicker(); // For selecting the lecture date
 
+        Label timeLabel = new Label("Time:");
         TextField timeField = new TextField();
         timeField.setPromptText("Time (HH:mm)");
 
+        Label roomLabel = new Label("Room:");
         TextField roomField = new TextField();
         roomField.setPromptText("Room (e.g., Room 101)");
 
@@ -66,15 +96,25 @@ public class TimetableApp extends Application {
         });
 
         // Layout
-        VBox layout = new VBox(10);
-        layout.setPadding(new Insets(20));
-        layout.getChildren().addAll(
-                new Label("Enter Lecture Details:"),
-                moduleField, datePicker, timeField, roomField,
-                addButton, statusLabel
-        );
+        GridPane grid = new GridPane();
+        grid.setPadding(new Insets(20));
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setAlignment(Pos.CENTER);
 
-        Scene scene = new Scene(layout, 300, 300);
+        // GridPane Components
+        grid.add(moduleLabel, 0, 0);
+        grid.add(moduleField, 1, 0);
+        grid.add(dateLabel, 0, 1);
+        grid.add(datePicker, 1, 1);
+        grid.add(timeLabel, 0, 2);
+        grid.add(timeField, 1, 2);
+        grid.add(roomLabel, 0, 3);
+        grid.add(roomField, 1, 3);
+        grid.add(addButton, 1, 4);
+        grid.add(statusLabel, 1, 5);
+
+        Scene scene = new Scene(grid, 500, 400);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Lecture Timetable");
         primaryStage.show();
