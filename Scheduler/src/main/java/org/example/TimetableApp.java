@@ -58,7 +58,7 @@ public class TimetableApp extends Application {
 
         Label timeLabel = new Label("Time:");
         TextField timeField = new TextField();
-        timeField.setPromptText("Time (HH:mm)");
+        timeField.setPromptText("Time (HH:mm) E.g 12:00");
 
         Label roomLabel = new Label("Room:");
         TextField roomField = new TextField();
@@ -75,6 +75,7 @@ public class TimetableApp extends Application {
                 LocalTime time = LocalTime.parse(timeField.getText());
                 String room = roomField.getText();
 
+                // No need to handle incorrect time format here as it is handled separately
                 if (module.isEmpty() || date == null || room.isEmpty()) {
                     statusLabel.setText("Please fill all fields.");
                     return;
@@ -85,6 +86,7 @@ public class TimetableApp extends Application {
                 statusLabel.setText("Lecture added successfully!");
 
                 // Clear fields after adding
+                // Allows for user to possibly add another lecture in succession
                 moduleField.clear();
                 timeField.clear();
                 roomField.clear();

@@ -58,14 +58,22 @@ public class Timetable {
         Lecture lecture1 = new Lecture("CS101", LocalDate.of(2025, 2, 16), LocalTime.of(9, 0), "Room 101"); // Sunday (day 7), will be skipped
         Lecture lecture2 = new Lecture("CS102", LocalDate.of(2025, 2, 17), LocalTime.of(10, 0), "Room 102"); // Monday
         Lecture lecture3 = new Lecture("CS103", LocalDate.of(2025, 2, 18), LocalTime.of(14, 0), "Room 103"); // Tuesday
+        Lecture lecture4 = new Lecture("CS104", LocalDate.of(2025, 2, 18), LocalTime.of(14, 0), "Room 103"); // Tuesday
+        Lecture lecture5 = new Lecture("CS105", LocalDate.of(2025, 2, 18), LocalTime.of(14, 0), "Room 103"); // Tuesday
+        Lecture lecture6 = new Lecture("CS106", LocalDate.of(2025, 2, 18), LocalTime.of(14, 0), "Room 103"); // Tuesday
 
-        timetable.addLecture(new Lecture("CS101",LocalDate.of(2025, 2, 19), LocalTime.of(11, 0), "Room 101"));
 
         timetable.addLecture(lecture1);  // Will be skipped as it is on Sunday
         timetable.addLecture(lecture2);  // Will go to Monday (index 0)
-        timetable.addLecture(lecture3);  // Will go to Tuesday (index 1)
+        timetable.addLecture(lecture3);
+        timetable.addLecture(lecture4);
+        timetable.addLecture(lecture5);
+        timetable.addLecture(lecture6);
+// Will go to Tuesday (index 1)
 
         // Display the full weekly schedule
         timetable.displayWeeklySchedule();
+
+
     }
 }
