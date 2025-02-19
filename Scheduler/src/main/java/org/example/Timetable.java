@@ -3,6 +3,8 @@ package org.example;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
+import java.util.Iterator;
+
 
 public class Timetable {
     // ArrayList of ArrayLists, each holding lectures for a specific day
@@ -27,28 +29,71 @@ public class Timetable {
     }
 
     // Method to display lectures for a specific day
-    public void displayDaySchedule(int dayIndex) {
-        if (dayIndex >= 0 && dayIndex < 5) {
-            ArrayList<Lecture> lectures = weeklyTimetable.get(dayIndex);
-            if (lectures.isEmpty()) {
-                System.out.println("No lectures scheduled for day " + (dayIndex + 1));
-            } else {
-                System.out.println("Schedule for Day " + (dayIndex + 1) + ":");
-                for (Lecture lecture : lectures) {
-                    System.out.println(lecture);
-                }
-            }
-        } else {
-            System.out.println("Invalid day index.");
+    public String getDaySchedule(LocalDate date) {
+        int dayIndex = date.getDayOfWeek().getValue() - 1; // 0 = Monday, 4 = Friday
+
+        if (dayIndex < 0 || dayIndex >= 5) {
+            return "Invalid date: Only Monday to Friday allowed.";
         }
+
+        List<Lecture> lectures = weeklyTimetable.get(dayIndex);
+        if (lectures.isEmpty()) {
+            return "No lectures scheduled for " + date + ".";
+        }
+
+        StringBuilder schedule = new StringBuilder("Schedule for " + date + ":\n");
+        for (Lecture lecture : lectures) {
+            schedule.append(lecture.getModule())
+                    .append(" at ")
+                    .append(lecture.getTime())
+                    .append(" in ")
+                    .append(lecture.getRoom())
+                    .append("\n");
+        }
+        return schedule.toString();
     }
 
     // Method to display the full week's timetable (Monday to Friday)
-    public void displayWeeklySchedule() {
+   /* public void displayWeeklySchedule() {
         for (int i = 0; i < 5; i++) {
             displayDaySchedule(i);  // Display the schedule for each day (index 0-4)
         }
+    } */
+
+    public boolean removeLecture(String module, LocalDate date, LocalTime time, String room) {
+        // Iterator used in this method to avoid a ConcurrentModificationException
+        int dayIndex = date.getDayOfWeek().getValue() - 1; // Convert date to index (0 = Monday, 4 = Friday)
+
+        if (dayIndex < 0 || dayIndex >= 5) {
+            System.out.println("Invalid date: " + date + ". Only Monday to Friday are allowed.");
+            return false;
+        }
+
+        ArrayList<Lecture> lecturesForDay = weeklyTimetable.get(dayIndex);
+        Iterator<Lecture> iterator = lecturesForDay.iterator();
+        boolean lectureFound = false;
+
+        while (iterator.hasNext()) {
+            Lecture lec = iterator.next();
+            if (lec.getModule().equals(module) && lec.getDate().equals(date) && lec.getTime().equals(time) && lec.getRoom().equals(room)) {
+                iterator.remove(); // Remove lecture
+                lectureFound = true;
+                System.out.println("Lecture removed: " + module + " on " + date + " at " + time + " in " + room);
+                break;
+            }
+        }
+
+        if (!lectureFound) {
+            System.out.println("Error: No lecture found matching the details provided.");
+            System.out.println("Here are the currently scheduled lectures for " + date + ":");
+            for (Lecture lec : lecturesForDay) {
+                System.out.println("- " + lec.getModule() + " at " + lec.getTime() + " in " + lec.getRoom());
+            }
+        }
+        return lectureFound;
     }
+
+
 
     public static void main(String[] args) {
         // Create a Timetable instance
@@ -72,7 +117,7 @@ public class Timetable {
 // Will go to Tuesday (index 1)
 
         // Display the full weekly schedule
-        timetable.displayWeeklySchedule();
+        //timetable.displayWeeklySchedule();
 
 
     }
