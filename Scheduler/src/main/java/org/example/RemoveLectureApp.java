@@ -7,6 +7,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import org.example.model.Timetable;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
