@@ -1,5 +1,7 @@
 package org.example.model;
 
+import org.example.IncorrectActionException;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
@@ -35,27 +37,20 @@ public class Timetable {
     }
 
 
-
-
-
     // Method to add a lecture to a specific day
-    public boolean addLecture(Lecture lecture) {
+    public boolean addLecture(Lecture lecture) throws IncorrectActionException {
         int dayIndex = lecture.getDate().getDayOfWeek().getValue() - 1;
 
-        // Make sure day is a valid day (mon-fri)
         if (dayIndex < 0 || dayIndex >= 5) {
-            System.out.println("Invalid date: " + lecture.getDate());
-            return false; // Invalid day
+            throw new IncorrectActionException("Invalid date: " + lecture.getDate() + ". Only Monday to Friday allowed.");
         }
-        // Make sure current time and room are not already in use
+
         if (isTimeSlotOccupied(lecture.getDate(), lecture.getTime(), lecture.getRoom())) {
-            System.out.println("Error: A lecture is already scheduled at " + lecture.getTime() + " on " + lecture.getDate() + " in " + lecture.getRoom());
-            return false; // Conflict found, return false
+            throw new IncorrectActionException("Error: A lecture is already scheduled at " + lecture.getTime() + " on " + lecture.getDate() + " in " + lecture.getRoom());
         }
-        // Ensures lectures are scheduled on the hour
+
         if (lecture.getTime().getMinute() != 0) {
-            System.out.println("Error: Lecture time must be exactly on the hour (e.g., 12:00, 13:00).");
-            return false;
+            throw new IncorrectActionException("Error: Lecture time must be exactly on the hour (e.g., 12:00, 13:00).");
         }
 
         // No conflict, add the lecture
@@ -65,10 +60,8 @@ public class Timetable {
     }
 
 
-
-
     // Method to display lectures for a specific day
-        public String getDaySchedule(LocalDate date) {
+    public String getDaySchedule(LocalDate date) {
         int dayIndex = date.getDayOfWeek().getValue() - 1; // 0 = Monday, 4 = Friday
 
         if (dayIndex < 0 || dayIndex >= 5) {
@@ -133,8 +126,7 @@ public class Timetable {
     }
 
 
-
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IncorrectActionException {
         // Create a Timetable instance
         Timetable timetable = new Timetable();
 
@@ -158,4 +150,6 @@ public class Timetable {
 
 
     }
+
+
 }

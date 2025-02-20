@@ -82,11 +82,6 @@ public class TimetableApp extends Application {
                 }
             }
         });
-
-
-
-
-
         // Event Handler: Add Lecture to Timetable
         addButton.setOnAction(e -> {
             try {

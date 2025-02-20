@@ -1,13 +1,11 @@
 package org.example;
 
-public class IncorrectActionException {
-    String message;
-
+public class IncorrectActionException extends Exception {
     public IncorrectActionException() {
-        this.message = "Incorrect Action Detected";
+        super("Incorrect Action Detected");
     }
 
-    public IncorrectActionException(String str) {
-        this.message = str;
+    public IncorrectActionException(String message) {
+        super(message);
     }
 }
