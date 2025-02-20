@@ -85,12 +85,12 @@ public class Timetable {
         return schedule.toString();
     }
 
-    // Method to display the full week's timetable (Monday to Friday)
-   /* public void displayWeeklySchedule() {
-        for (int i = 0; i < 5; i++) {
-            displayDaySchedule(i);  // Display the schedule for each day (index 0-4)
+    public ArrayList<Lecture> getLecturesForDay(int dayIndex) {
+        if (dayIndex < 0 || dayIndex >= 5) {
+            throw new IllegalArgumentException("Invalid day index: " + dayIndex + ". Must be between 0 (Monday) and 4 (Friday).");
         }
-    } */
+        return weeklyTimetable.get(dayIndex); // This would return the list of lectures for that day
+    }
 
     public boolean removeLecture(String module, LocalDate date, LocalTime time, String room) {
         // Iterator used in this method to avoid a ConcurrentModificationException
