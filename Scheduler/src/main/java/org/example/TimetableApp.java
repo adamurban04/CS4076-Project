@@ -13,7 +13,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.example.model.Lecture;
 import org.example.model.Timetable;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -71,6 +70,23 @@ public class TimetableApp extends Application {
         Button addButton = new Button("Add Lecture");
         Label statusLabel = new Label();
 
+        datePicker.setDayCellFactory(picker -> new javafx.scene.control.DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+
+                // Disable past dates
+                if (date.isBefore(LocalDate.now())) {
+                    setDisable(true);
+                    setStyle("-fx-background-color: #CCCCCC;"); // Gray out past dates
+                }
+            }
+        });
+
+
+
+
+
         // Event Handler: Add Lecture to Timetable
         addButton.setOnAction(e -> {
             try {
@@ -79,27 +95,42 @@ public class TimetableApp extends Application {
                 LocalTime time = LocalTime.parse(timeField.getText());
                 String room = roomField.getText();
 
-                // No need to handle incorrect time format here as it is handled separately
+                // Validate input
                 if (module.isEmpty() || date == null || room.isEmpty()) {
                     statusLabel.setText("Please fill all fields.");
                     return;
                 }
 
-                Lecture newLecture = new Lecture(module, date, time, room);
-                timetable.addLecture(newLecture); // Add to timetable
-                statusLabel.setText("Lecture added successfully!");
+                if (date.isBefore(LocalDate.now())) {
+                    statusLabel.setText("Error: You cannot select a past date.");
+                    return;  // Stop execution
+                }
 
-                // Clear fields after adding
-                // Allows for user to possibly add another lecture in succession
-                moduleField.clear();
-                timeField.clear();
-                roomField.clear();
-                datePicker.setValue(null);
+                // Create the new lecture
+                Lecture newLecture = new Lecture(module, date, time, room);
+
+                // Try to add the lecture
+                boolean success = timetable.addLecture(newLecture);
+
+                if (success) {
+                    statusLabel.setText("Lecture added successfully!");
+                } else {
+                    statusLabel.setText("Error: Room already booked for that time.");
+                }
+
+                // Clear fields after adding, if successful
+                if (success) {
+                    moduleField.clear();
+                    timeField.clear();
+                    roomField.clear();
+                    datePicker.setValue(null);
+                }
 
             } catch (Exception ex) {
                 statusLabel.setText("Invalid input format. Use HH:mm for time.");
             }
         });
+
 
         // Layout
         GridPane grid = new GridPane();
@@ -125,6 +156,9 @@ public class TimetableApp extends Application {
         primaryStage.setTitle("Lecture Timetable");
         primaryStage.show();
     }
+
+
+
 
 
 }

@@ -4,6 +4,9 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
+
+// NOTES FOR ADAM
+// ALWAYS PUSH BEFORE YOU FINISH FOR THE DAY
 public class Lecture {
     private static ArrayList<String> modules = new ArrayList<>();
 
@@ -19,23 +22,27 @@ public class Lecture {
         if (modules.size() >= 5) {  // Prevents adding more than 5 modules
             throw new IllegalArgumentException("Maximum of 5 modules allowed.");
         }
-        if (!modules.contains(module)) { // Check if module is unique
-            this.module = module;
-            modules.add(module);
+
+        if (!modules.contains(module)) {  // If the module is new
+            modules.add(module);  // Add the module to the list
             System.out.println(module + " added!");
             System.out.println("Current module count: " + modules.size());  // Debugging line
-
-        } else {
-            throw new IllegalArgumentException("Module already exists.");
         }
+        this.module = module;
         this.date = date;
         this.time = time;
         this.room = room;
+
+        System.out.println(module + " lecture scheduled for " + date + " at " + time + " in " + room);
+        System.out.println("Current module count: " + modules.size());  // Debugging line
     }
+
 
     public String getModule() {
         return module;
     }
+
+
 
     public void setModule(String module) {
         this.module = module;
@@ -65,10 +72,7 @@ public class Lecture {
         this.room = room;
     }
 
-    public boolean conflictsWith(Lecture other) {
-        //allows for checking of conflicting lectures (Gonna be useful)
-        return this.date.equals(other.date) && this.time.equals(other.time) && this.room.equals(other.room);
-    }
+
 
     @Override
     public String toString() {

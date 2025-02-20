@@ -17,19 +17,53 @@ public class Timetable {
         }
     }
 
-    // Method to add a lecture to a specific day
-    public void addLecture(Lecture lecture) {
-        // Get the day of the week index (0 = Monday, 4 = Friday)
-        int dayIndex = lecture.getDate().getDayOfWeek().getValue() - 1; // 1 = Monday, 7 = Sunday
-
-        // Ensure the index is valid (0 to 4 for Monday to Friday)
-        if (dayIndex >= 0 && dayIndex <= 4) {
-            weeklyTimetable.get(dayIndex).add(lecture);  // Add the lecture to the respective day
+    public boolean isTimeSlotOccupied(LocalDate date, LocalTime time, String room) {
+        int dayIndex = date.getDayOfWeek().getValue() - 1; // Get the day index (0=Monday, 4=Friday)
+        if (dayIndex < 0 || dayIndex >= 5) {
+            return false; // Invalid date (outside Monday-Friday)
         }
+
+        ArrayList<Lecture> lecturesForDay = weeklyTimetable.get(dayIndex);
+        for (Lecture lecture : lecturesForDay) {
+            // Check if there's a conflict with both time and room
+            if (lecture.getTime().equals(time) && lecture.getRoom().equals(room)) {
+                return true; // Conflict found
+            }
+        }
+
+        return false; // No conflict found
     }
 
+
+
+
+
+    // Method to add a lecture to a specific day
+    public boolean addLecture(Lecture lecture) {
+        int dayIndex = lecture.getDate().getDayOfWeek().getValue() - 1;
+
+        if (dayIndex < 0 || dayIndex >= 5) {
+            System.out.println("Invalid date: " + lecture.getDate());
+            return false; // Invalid day
+        }
+
+        // Check if the time slot is already occupied (including room check)
+        if (isTimeSlotOccupied(lecture.getDate(), lecture.getTime(), lecture.getRoom())) {
+            System.out.println("Error: A lecture is already scheduled at " + lecture.getTime() + " on " + lecture.getDate() + " in " + lecture.getRoom());
+            return false; // Conflict found, return false
+        }
+
+        // No conflict, add the lecture
+        weeklyTimetable.get(dayIndex).add(lecture);
+        System.out.println("Lecture added: " + lecture.getModule() + " on " + lecture.getDate() + " at " + lecture.getTime() + " in " + lecture.getRoom());
+        return true; // Successfully added
+    }
+
+
+
+
     // Method to display lectures for a specific day
-    public String getDaySchedule(LocalDate date) {
+        public String getDaySchedule(LocalDate date) {
         int dayIndex = date.getDayOfWeek().getValue() - 1; // 0 = Monday, 4 = Friday
 
         if (dayIndex < 0 || dayIndex >= 5) {
