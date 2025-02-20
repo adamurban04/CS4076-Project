@@ -269,9 +269,9 @@ public class TimetableApp2 extends Application {
         // Logic for other functionalities
         System.out.println("Other screen (yet to be implemented)");
         // Used to show our own exception class
-        // Youmustdefineanewexceptioncalled IncorrectActionException that  produces a message
+        // You must define an exception called IncorrectActionException that  produces a message
         // error that will be  sent by the  server. This exception
-        // will be thrown if the user provides an incorrectaction format
+        // will be thrown if the user provides an incorrect action format
         // Your application must then react to this exception
     }
 }
