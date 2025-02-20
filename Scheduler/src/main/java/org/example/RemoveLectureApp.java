@@ -8,8 +8,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.example.model.Timetable;
 
-import org.example.model.Timetable;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -39,6 +37,18 @@ public class RemoveLectureApp extends Application {
         TextArea scheduleDisplay = new TextArea();
         scheduleDisplay.setEditable(false);
 
+        // Disable past dates in DatePicker
+        datePicker.setDayCellFactory(picker -> new javafx.scene.control.DateCell() {
+            @Override
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                if (date.isBefore(LocalDate.now())) {
+                    setDisable(true);
+                    setStyle("-fx-background-color: #CCCCCC;");
+                }
+            }
+        });
+
         // Event Handler: Remove Lecture
         removeButton.setOnAction(e -> {
             try {
@@ -52,12 +62,23 @@ public class RemoveLectureApp extends Application {
                     return;
                 }
 
+                if (date.isBefore(LocalDate.now())) {
+                    statusLabel.setText("Error: You cannot remove a lecture from a past date.");
+                    return;
+                }
+
+                // Ensure time is strictly on the hour
+                if (time.getMinute() != 0) {
+                    statusLabel.setText("Invalid time. Only full-hour times allowed (e.g., 12:00, 14:00).");
+                    return;
+                }
+
                 boolean removed = timetable.removeLecture(module, date, time, room);
 
                 if (removed) {
                     statusLabel.setText("Lecture removed successfully!");
                 } else {
-                      statusLabel.setText("No matching lecture found. Schedule for that day:");
+                    statusLabel.setText("No matching lecture found. Schedule for that day:");
                     scheduleDisplay.setText(timetable.getDaySchedule(date));
                 }
 

@@ -42,15 +42,20 @@ public class Timetable {
     public boolean addLecture(Lecture lecture) {
         int dayIndex = lecture.getDate().getDayOfWeek().getValue() - 1;
 
+        // Make sure day is a valid day (mon-fri)
         if (dayIndex < 0 || dayIndex >= 5) {
             System.out.println("Invalid date: " + lecture.getDate());
             return false; // Invalid day
         }
-
-        // Check if the time slot is already occupied (including room check)
+        // Make sure current time and room are not already in use
         if (isTimeSlotOccupied(lecture.getDate(), lecture.getTime(), lecture.getRoom())) {
             System.out.println("Error: A lecture is already scheduled at " + lecture.getTime() + " on " + lecture.getDate() + " in " + lecture.getRoom());
             return false; // Conflict found, return false
+        }
+        // Ensures lectures are scheduled on the hour
+        if (lecture.getTime().getMinute() != 0) {
+            System.out.println("Error: Lecture time must be exactly on the hour (e.g., 12:00, 13:00).");
+            return false;
         }
 
         // No conflict, add the lecture
@@ -148,9 +153,7 @@ public class Timetable {
         timetable.addLecture(lecture4);
         timetable.addLecture(lecture5);
         timetable.addLecture(lecture6);
-// Will go to Tuesday (index 1)
 
-        // Display the full weekly schedule
         //timetable.displayWeeklySchedule();
 
 
