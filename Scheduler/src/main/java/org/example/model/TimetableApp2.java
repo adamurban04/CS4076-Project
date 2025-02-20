@@ -14,8 +14,6 @@ import javafx.stage.Stage;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-//james come on, fix the debugging terminal lines bruh
-
 public class TimetableApp2 extends Application {
     private Timetable timetable = new Timetable(); // Instance of the timetable
     private Stage primaryStage;
@@ -264,10 +262,16 @@ public class TimetableApp2 extends Application {
     private void showDisplayTimetableScreen() {
         // Logic for displaying the timetable
         System.out.println("Display Timetable screen (yet to be implemented)");
+        // Needs to be implemented in a way that looks nice (possibly dynamic timetable)
     }
 
     private void showOtherScreen() {
         // Logic for other functionalities
         System.out.println("Other screen (yet to be implemented)");
+        // Used to show our own exception class
+        // Youmustdefineanewexceptioncalled IncorrectActionException that  produces a message
+        // error that will be  sent by the  server. This exception
+        // will be thrown if the user provides an incorrectaction format
+        // Your application must then react to this exception
     }
 }
