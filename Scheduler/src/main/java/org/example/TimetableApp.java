@@ -17,6 +17,8 @@ import org.example.model.Timetable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+// THE MAIN CLASS THAT INITIALIZES THE APP AND MANAGES SCENES
+
 public class TimetableApp extends Application {
     private Timetable timetable = new Timetable(); // Instance of the timetable
     private Stage primaryStage;
