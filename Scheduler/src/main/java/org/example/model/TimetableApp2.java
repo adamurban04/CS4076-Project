@@ -14,6 +14,8 @@ import javafx.stage.Stage;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+//james come on, fix the debugging terminal lines bruh
+
 public class TimetableApp2 extends Application {
     private Timetable timetable = new Timetable(); // Instance of the timetable
     private Stage primaryStage;
