@@ -1,6 +1,6 @@
 package org.example.model;
 
-import org.example.IncorrectActionException;
+import org.example.exceptions.IncorrectActionException;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
