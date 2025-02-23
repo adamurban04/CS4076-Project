@@ -1,4 +1,4 @@
-package org.example.model;
+package org.view;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -11,6 +11,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.model.Lecture;
+import org.model.Timetable;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 

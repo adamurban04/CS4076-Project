@@ -1,4 +1,4 @@
-package org.example.model;
+package org.model;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -13,12 +13,8 @@ public class Lecture {
     private LocalDate date;    // e.g., "2025-02-14"
     private LocalTime time;    // e.g., "10:00"
     private String room;
-    public Lecture() {
-    }
+
     public Lecture(String module, LocalDate date, LocalTime time, String room) {
-        if (modules.size() >= 5) {  // Prevents adding more than 5 modules
-            throw new IllegalArgumentException("Maximum of 5 modules allowed.");
-        }
         if (!modules.contains(module)) {  // If the module is new
             modules.add(module);  // Add the module to the list
             System.out.println(module + " added!");
@@ -28,8 +24,6 @@ public class Lecture {
         this.date = date;
         this.time = time;
         this.room = room;
-        System.out.println(module + " lecture scheduled for " + date + " at " + time + " in " + room);
-        System.out.println("Current module count: " + modules.size());  // Debugging line
     }
     public String getModule() {
         return module;
@@ -43,6 +37,7 @@ public class Lecture {
     public String getRoom() {
         return room;
     }
+
     @Override
     public String toString() {
         return "Lecture{" +

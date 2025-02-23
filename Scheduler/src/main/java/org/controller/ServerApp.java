@@ -1,5 +1,6 @@
-package org.example.controller;
-import org.example.model.Timetable;
+package org.controller;
+import org.controller.ClientHandler;
+import org.model.Timetable;
 
 import java.io.*;
 import java.net.*;

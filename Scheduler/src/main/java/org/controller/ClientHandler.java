@@ -1,17 +1,18 @@
-package org.example.controller;
+package org.controller;
 
-import org.example.model.Timetable;
+import org.exceptions.IncorrectActionException;
+import org.model.Timetable;
 
 import java.net.Socket;
 import java.io.*;
 
 public class ClientHandler implements Runnable{
-    private Socket socket;
-    private Timetable timetable;
+    private final Socket socket;
+    private final Timetable sharedTimetable;  // final for objects means the reference cannot change
 
     public ClientHandler(Socket socket, Timetable timetable) {  //each client has socket and timetable
         this.socket = socket;
-        this.timetable = timetable;
+        this.sharedTimetable = timetable;
     }
 
     @Override
@@ -24,7 +25,13 @@ public class ClientHandler implements Runnable{
                 System.out.println("Received Message: " + request);
 
                 // Process request
-                String response = RequestProcessor.processRequest(request, timetable);
+                String response;
+                try {
+                    response = RequestProcessor.processRequest(request, sharedTimetable);
+                } catch (IncorrectActionException e) {
+                    response = "ERROR: " + e.getMessage();
+                }
+
                 out.println(response); // Send response to client
             }
         } catch (IOException e) {

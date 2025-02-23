@@ -1,6 +1,6 @@
-package org.example.model;
+package org.model;
 
-import org.example.exceptions.IncorrectActionException;
+import org.exceptions.IncorrectActionException;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -10,7 +10,7 @@ import java.util.Iterator;
 
 public class Timetable {
     // ArrayList of ArrayLists, each holding lectures for a specific day
-    private ArrayList<ArrayList<Lecture>> weeklyTimetable;
+    private final ArrayList<ArrayList<Lecture>> weeklyTimetable;
 
     public Timetable() {
         weeklyTimetable = new ArrayList<>(5);  // Only Monday to Friday
