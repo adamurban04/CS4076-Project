@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public class TimetableApp2 extends Application {
+public class TimetableApp extends Application {
     private Timetable timetable = new Timetable(); // Instance of the timetable
     private Stage primaryStage;
 
@@ -28,6 +28,7 @@ public class TimetableApp2 extends Application {
         showMainScreen();
     }
 
+    // Screen: Menu with options
     private void showMainScreen() {
         // UI Components for adding, removing, and displaying timetable
         Button addButton = new Button("Add Lecture");
@@ -35,7 +36,7 @@ public class TimetableApp2 extends Application {
         Button displayButton = new Button("Display Timetable");
         Button otherButton = new Button("Other");
 
-        // Set up event handlers for each button
+        // Event handlers for each button
         addButton.setOnAction(e -> showAddLectureScreen());
         removeButton.setOnAction(e -> showRemoveLectureScreen());
         displayButton.setOnAction(e -> showDisplayTimetableScreen());
@@ -53,6 +54,7 @@ public class TimetableApp2 extends Application {
         primaryStage.show();
     }
 
+    // Screen: Adding lecture
     private void showAddLectureScreen() {
         // Data input fields for adding a lecture
         Label moduleLabel = new Label("Module:");
