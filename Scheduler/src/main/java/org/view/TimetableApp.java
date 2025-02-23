@@ -31,8 +31,8 @@ public class TimetableApp extends Application {
         Button otherButton = new Button("Test Incorrect Action");
 
         addButton.setOnAction(e -> new AddLectureView(primaryStage, this::showMainScreen));
-        removeButton.setOnAction(e -> new RemoveLectureView(primaryStage, timetable, this::showMainScreen));
-        displayButton.setOnAction(e -> new DisplayTimetableView(primaryStage, timetable, this::showMainScreen));
+        removeButton.setOnAction(e -> new RemoveLectureView(primaryStage, this::showMainScreen));
+        displayButton.setOnAction(e -> new DisplayTimetableView(primaryStage, this::showMainScreen));
         otherButton.setOnAction(e -> new OtherView(primaryStage, this::showMainScreen));
 
         VBox buttonLayout = new VBox(10, addButton, removeButton, displayButton, otherButton);

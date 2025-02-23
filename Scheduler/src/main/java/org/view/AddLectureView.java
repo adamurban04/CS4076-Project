@@ -8,8 +8,6 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import org.controller.ClientConnection;
 
-import java.io.PrintWriter;
-import java.net.Socket;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 

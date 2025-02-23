@@ -19,6 +19,7 @@ public class ClientConnection {
 
     public static ClientConnection getInstance() throws IOException {
         if (instance == null) {
+            System.out.println("Creating a new connection to the server...");
             instance = new ClientConnection();
         }
         return instance;

@@ -6,9 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
-import java.io.PrintWriter;
-import java.net.Socket;
+import org.controller.ClientConnection;
 
 public class OtherView {
     private final Stage stage;
@@ -43,13 +41,8 @@ public class OtherView {
     }
 
     private String sendInvalidRequest() {
-        try (Socket socket = new Socket("localhost", 1234);
-             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-             java.util.Scanner in = new java.util.Scanner(socket.getInputStream())) {
-
-            out.println("InvalidCommand$test"); // Send an invalid request
-            return in.nextLine(); // Read the server's response
-
+        try {
+            return ClientConnection.getInstance().sendRequest("InvalidCommand$test");
         } catch (Exception e) {
             return "Error: Unable to connect to the server.";
         }
