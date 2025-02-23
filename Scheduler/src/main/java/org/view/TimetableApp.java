@@ -27,12 +27,14 @@ public class TimetableApp extends Application {
         Button addButton = new Button("Add Lecture");
         Button removeButton = new Button("Remove Lecture");
         Button displayButton = new Button("Display Timetable");
+        Button otherButton = new Button("Test Incorrect Action");
 
         addButton.setOnAction(e -> new AddLectureView(primaryStage, timetable, this::showMainScreen));
         removeButton.setOnAction(e -> new RemoveLectureView(primaryStage, timetable, this::showMainScreen));
         displayButton.setOnAction(e -> new DisplayTimetableView(primaryStage, timetable, this::showMainScreen));
+        otherButton.setOnAction(e -> new OtherView(primaryStage, this::showMainScreen));
 
-        VBox buttonLayout = new VBox(10, addButton, removeButton, displayButton);
+        VBox buttonLayout = new VBox(10, addButton, removeButton, displayButton, otherButton);
         buttonLayout.setPadding(new Insets(20));
         buttonLayout.setAlignment(Pos.CENTER);
 

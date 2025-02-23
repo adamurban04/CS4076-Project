@@ -8,6 +8,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import org.model.Timetable;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 
 public class AddLectureView {
@@ -42,14 +43,19 @@ public class AddLectureView {
         Button backButton = new Button("Back");
         Label statusLabel = new Label();
 
-        // Disable past dates
+
+
         datePicker.setDayCellFactory(picker -> new javafx.scene.control.DateCell() {
             @Override
             public void updateItem(LocalDate date, boolean empty) {
                 super.updateItem(date, empty);
                 if (date.isBefore(LocalDate.now())) {
                     setDisable(true);
-                    setStyle("-fx-background-color: #CCCCCC;");
+                    setStyle("-fx-background-color: #FF9999;");
+                }
+                if (date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY) {
+                    setDisable(true);
+                    setStyle("-fx-background-color: #FF9999;"); // Red for weekends
                 }
             }
         });

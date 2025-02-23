@@ -5,8 +5,6 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 
 
-// NOTES FOR ADAM
-// ALWAYS PUSH BEFORE YOU FINISH FOR THE DAY
 public class Lecture {
     private static ArrayList<String> modules = new ArrayList<>();
     private String module;

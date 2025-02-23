@@ -10,10 +10,13 @@ import java.util.Iterator;
 
 public class Timetable {
     // ArrayList of ArrayLists, each holding lectures for a specific day
-    private final ArrayList<Lecture> lectures;
+    private final ArrayList<ArrayList<Lecture>> weeklyTimetable; // 5 slots for Mon-Fri
 
     public Timetable() {
-        this.lectures = new ArrayList<>();
+        weeklyTimetable = new ArrayList<>(5);
+        for (int i = 0; i < 5; i++) {
+            weeklyTimetable.add(new ArrayList<>());  // Create empty lists for each day
+        }
     }
 
     // Method to add a lecture to a specific day
@@ -31,43 +34,58 @@ public class Timetable {
                 return "ERROR: Time slot occupied for " + room + " at " + time;
             }
 
-            lectures.add(new Lecture(module, date, time, room));
+            weeklyTimetable.get(date.getDayOfWeek().getValue() - 1).add(new Lecture(module, date, time, room));
             return "Lecture added: " + module + " on " + date + " at " + time + " in " + room;
         } catch (Exception e) {
             throw new IncorrectActionException("Invalid date/time format.");
         }
     }
 
-
-
     public synchronized String removeLecture(String details) throws IncorrectActionException {
-        Iterator<Lecture> iterator = lectures.iterator();
-        while (iterator.hasNext()) {
-            Lecture lecture = iterator.next();
-            if (lecture.getModule().equalsIgnoreCase(details.trim())) {
-                iterator.remove();
-                return "Lecture removed: " + details;
+        String[] parts = details.split(",");
+        if (parts.length < 2) throw new IncorrectActionException("Invalid lecture format. Expected: module,date");
+
+        try {
+            String module = parts[0].trim();
+            LocalDate date = LocalDate.parse(parts[1].trim());
+            int dayIndex = date.getDayOfWeek().getValue() - 1;
+
+            Iterator<Lecture> iterator = weeklyTimetable.get(dayIndex).iterator();
+            while (iterator.hasNext()) {
+                Lecture lecture = iterator.next();
+                if (lecture.getModule().equalsIgnoreCase(module) && lecture.getDate().equals(date)) {
+                    iterator.remove();
+                    return "Lecture removed: " + module + " on " + date;
+                }
             }
+            return "ERROR: Lecture not found.";
+        } catch (Exception e) {
+            throw new IncorrectActionException("Invalid date format.");
         }
-        return "ERROR: Lecture not found.";
     }
 
     public synchronized String getSchedule() {
-        if (lectures.isEmpty()) {
-            return "No lectures scheduled.";
-        }
-
         StringBuilder schedule = new StringBuilder("Scheduled Lectures:\n");
-        for (Lecture lecture : lectures) {
-            schedule.append(lecture).append("\n");
+        String[] weekdays = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
+
+        for (int i = 0; i < 5; i++) {
+            schedule.append(weekdays[i]).append(":\n");
+            if (weeklyTimetable.get(i).isEmpty()) {
+                schedule.append("  No lectures.\n");
+            } else {
+                for (Lecture lecture : weeklyTimetable.get(i)) {
+                    schedule.append("  ").append(lecture).append("\n");
+                }
+            }
         }
         return schedule.toString();
     }
 
 
     private boolean isTimeSlotOccupied(LocalDate date, LocalTime time, String room) {
-        for (Lecture lecture : lectures) {
-            if (lecture.getDate().equals(date) && lecture.getTime().equals(time) && lecture.getRoom().equals(room)) {
+        int dayIndex = date.getDayOfWeek().getValue() - 1;
+        for (Lecture lecture : weeklyTimetable.get(dayIndex)) {
+            if (lecture.getTime().equals(time) && lecture.getRoom().equals(room)) {
                 return true;
             }
         }
