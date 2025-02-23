@@ -6,83 +6,64 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import org.model.Timetable;
+import org.controller.ClientConnection;
 
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 
 public class AddLectureView {
-    private final Timetable timetable;
     private final Stage stage;
     private final Runnable onBack;
+    private TextField moduleField;
+    private DatePicker datePicker;
+    private TextField timeField;
+    private TextField roomField;
+    private Label responseLabel;
 
-    public AddLectureView(Stage stage, Timetable timetable, Runnable onBack) {
+    public AddLectureView(Stage stage, Runnable onBack) {
         this.stage = stage;
-        this.timetable = timetable;
         this.onBack = onBack;
         showAddLectureScreen();
     }
 
     private void showAddLectureScreen() {
         Label moduleLabel = new Label("Module:");
-        TextField moduleField = new TextField();
-        moduleField.setPromptText("e.g., CS101");
+        moduleField = new TextField();
+        moduleField.setPromptText("LM051");
 
         Label dateLabel = new Label("Date:");
-        DatePicker datePicker = new DatePicker();
+        datePicker = new DatePicker();
 
         Label timeLabel = new Label("Time:");
-        TextField timeField = new TextField();
+        timeField = new TextField();
         timeField.setPromptText("HH:mm");
 
         Label roomLabel = new Label("Room:");
-        TextField roomField = new TextField();
-        roomField.setPromptText("Room 101");
+        roomField = new TextField();
+        roomField.setPromptText("CG001");
 
         Button addLectureButton = new Button("Add Lecture");
         Button backButton = new Button("Back");
-        Label statusLabel = new Label();
-
-
+        responseLabel = new Label();
 
         datePicker.setDayCellFactory(picker -> new javafx.scene.control.DateCell() {
             @Override
             public void updateItem(LocalDate date, boolean empty) {
                 super.updateItem(date, empty);
-                if (date.isBefore(LocalDate.now())) {
+                if (date.isBefore(LocalDate.now()) ||
+                        date.getDayOfWeek() == DayOfWeek.SATURDAY ||
+                        date.getDayOfWeek() == DayOfWeek.SUNDAY) {
                     setDisable(true);
-                    setStyle("-fx-background-color: #FF9999;");
-                }
-                if (date.getDayOfWeek() == DayOfWeek.SATURDAY || date.getDayOfWeek() == DayOfWeek.SUNDAY) {
-                    setDisable(true);
-                    setStyle("-fx-background-color: #FF9999;"); // Red for weekends
+                    setStyle("-fx-background-color: #FF9999;"); // Red for weekends and past dates
                 }
             }
         });
 
         addLectureButton.setOnAction(e -> {
-            try {
-                String module = moduleField.getText();
-                LocalDate date = datePicker.getValue();
-                String time = timeField.getText();
-                String room = roomField.getText();
-
-                if (module.isEmpty() || date == null || time.isEmpty() || room.isEmpty()) {
-                    statusLabel.setText("Please fill all fields.");
-                    return;
-                }
-
-                String lectureDetails = module + ", " + date + ", " + time + ", " + room;
-                String result = timetable.addLecture(lectureDetails);
-                statusLabel.setText(result);
-
-                moduleField.clear();
-                timeField.clear();
-                roomField.clear();
-                datePicker.setValue(null);
-            } catch (Exception ex) {
-                statusLabel.setText("Invalid input format.");
-            }
+            String response = sendAddLectureRequest();
+            responseLabel.setText(response);
         });
 
         backButton.setOnAction(e -> onBack.run());
@@ -103,10 +84,31 @@ public class AddLectureView {
         grid.add(roomField, 1, 3);
         grid.add(addLectureButton, 1, 4);
         grid.add(backButton, 1, 5);
-        grid.add(statusLabel, 1, 6);
+        grid.add(responseLabel, 1, 6);
 
         Scene scene = new Scene(grid, 500, 400);
         stage.setScene(scene);
         stage.setTitle("Add Lecture");
     }
+
+    private String sendAddLectureRequest() {
+        try {
+            String module = moduleField.getText().trim();
+            LocalDate date = datePicker.getValue();
+            String time = timeField.getText().trim();
+            String room = roomField.getText().trim();
+
+            if (module.isEmpty() || date == null || time.isEmpty() || room.isEmpty()) {
+                return "Please fill all fields.";
+            }
+
+            String request = "Add$" + module + "," + date + "," + time + "," + room;
+            return ClientConnection.getInstance().sendRequest(request); // Use persistent connection
+
+        } catch (Exception e) {
+            return "Error: Unable to send request.";
+        }
+    }
+
+
 }

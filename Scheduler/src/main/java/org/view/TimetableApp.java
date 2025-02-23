@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.controller.ClientConnection;
 import org.model.Timetable;
 
 public class TimetableApp extends Application {
@@ -29,7 +30,7 @@ public class TimetableApp extends Application {
         Button displayButton = new Button("Display Timetable");
         Button otherButton = new Button("Test Incorrect Action");
 
-        addButton.setOnAction(e -> new AddLectureView(primaryStage, timetable, this::showMainScreen));
+        addButton.setOnAction(e -> new AddLectureView(primaryStage, this::showMainScreen));
         removeButton.setOnAction(e -> new RemoveLectureView(primaryStage, timetable, this::showMainScreen));
         displayButton.setOnAction(e -> new DisplayTimetableView(primaryStage, timetable, this::showMainScreen));
         otherButton.setOnAction(e -> new OtherView(primaryStage, this::showMainScreen));
@@ -43,4 +44,11 @@ public class TimetableApp extends Application {
         primaryStage.setTitle("Lecture Timetable");
         primaryStage.show();
     }
+
+    @Override
+    public void stop() throws Exception {
+        ClientConnection.getInstance().closeConnection(); // Close connection when app exits
+        super.stop();
+    }
+
 }
