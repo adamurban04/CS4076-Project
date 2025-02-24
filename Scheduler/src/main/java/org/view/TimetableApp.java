@@ -11,7 +11,8 @@ import org.controller.ClientConnection;
 import org.model.Timetable;
 
 public class TimetableApp extends Application {
-    private final Timetable timetable = new Timetable();
+    private static final int WIDTH = 700;
+    private static final int HEIGHT = 500;
     private Stage primaryStage;
 
     public static void main(String[] args) {
@@ -21,6 +22,9 @@ public class TimetableApp extends Application {
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
+        primaryStage.setWidth(WIDTH);
+        primaryStage.setHeight(HEIGHT);
+        primaryStage.setResizable(false); //fixed window size
         showMainScreen();
     }
 
@@ -39,7 +43,7 @@ public class TimetableApp extends Application {
         buttonLayout.setPadding(new Insets(20));
         buttonLayout.setAlignment(Pos.CENTER);
 
-        Scene scene = new Scene(buttonLayout, 500, 400);
+        Scene scene = new Scene(buttonLayout, WIDTH, HEIGHT);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Lecture Timetable");
         primaryStage.show();
