@@ -43,7 +43,7 @@ public class DisplayTimetableView {
 
     private String sendDisplayTimetableRequest() {
         try {
-            return ClientConnection.getInstance().sendRequest("Display$");
+            return ClientConnection.getInstance().sendRequest("Display$ ");
         } catch (Exception e) {
             return "Error: Unable to retrieve timetable.";
         }

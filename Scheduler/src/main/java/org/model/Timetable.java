@@ -34,7 +34,7 @@ public class Timetable {
                 return "ERROR: Time slot occupied for " + room + " at " + time;
             }
 
-            weeklyTimetable.get(date.getDayOfWeek().getValue() - 1).add(new Lecture(module, date, time, room));
+            weeklyTimetable.get(date.getDayOfWeek().getValue() - 1).add(new Lecture(module, date, time, room)); //stores in timetable
             return "Lecture added: " + module + " on " + date + " at " + time + " in " + room;
         } catch (Exception e) {
             throw new IncorrectActionException("Invalid date/time format.");
@@ -43,19 +43,22 @@ public class Timetable {
 
     public synchronized String removeLecture(String details) throws IncorrectActionException {
         String[] parts = details.split(",");
-        if (parts.length < 2) throw new IncorrectActionException("Invalid lecture format. Expected: module,date");
+        if (parts.length < 2) throw new IncorrectActionException("Invalid lecture format. Expected: module,date,time");
 
         try {
             String module = parts[0].trim();
             LocalDate date = LocalDate.parse(parts[1].trim());
+            LocalTime time = LocalTime.parse(parts[2].trim());
+            String room = parts[3].trim();
+
             int dayIndex = date.getDayOfWeek().getValue() - 1;
 
             Iterator<Lecture> iterator = weeklyTimetable.get(dayIndex).iterator();
             while (iterator.hasNext()) {
                 Lecture lecture = iterator.next();
-                if (lecture.getModule().equalsIgnoreCase(module) && lecture.getDate().equals(date)) {
+                if (lecture.getModule().equalsIgnoreCase(module) && lecture.getDate().equals(date) && lecture.getTime().equals(time)) {
                     iterator.remove();
-                    return "Lecture removed: " + module + " on " + date;
+                    return "Lecture removed: " + module + " on " + date + " at " + time + " in " + room;
                 }
             }
             return "ERROR: Lecture not found.";
