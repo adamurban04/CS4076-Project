@@ -1,7 +1,6 @@
 package org.controller;
-import org.controller.ClientHandler;
-import org.model.Timetable;
 
+import org.model.Timetable;
 import java.io.*;
 import java.net.*;
 import java.util.concurrent.ExecutorService;

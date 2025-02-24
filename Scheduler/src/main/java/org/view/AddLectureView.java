@@ -10,6 +10,7 @@ import org.controller.ClientConnection;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class AddLectureView {
     private final Stage stage;
@@ -98,6 +99,12 @@ public class AddLectureView {
 
             if (module.isEmpty() || date == null || time.isEmpty() || room.isEmpty()) {
                 return "Please fill all fields.";
+            }
+
+            // Ensure the time is at a full hour
+            LocalTime parsedTime = LocalTime.parse(time);
+            if (parsedTime.getMinute() != 0) {
+                return "Invalid time. Must be a full hour (e.g., 10:00, 15:00).";
             }
 
             String request = "Add$" + module + "," + date + "," + time + "," + room;

@@ -11,6 +11,7 @@ public class ClientHandler implements Runnable{
     private final Timetable sharedTimetable;  // final for objects means the reference cannot change
 
     public ClientHandler(Socket socket, Timetable timetable) {  //each client has socket and timetable
+        // timetable could be static, however in future for scalability we might want to have more timetables for more courses etc.
         this.socket = socket;
         this.sharedTimetable = timetable;
     }
