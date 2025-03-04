@@ -8,7 +8,9 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.controller.ClientConnection;
-import org.model.Timetable;
+import javafx.scene.control.Label;
+
+
 
 public class TimetableApp extends Application {
     private static final int WIDTH = 700;
@@ -29,6 +31,9 @@ public class TimetableApp extends Application {
     }
 
     private void showMainScreen() {
+        Label titleLabel = new Label("LM121 Actions");
+        titleLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
+
         Button addButton = new Button("Add Lecture");
         Button removeButton = new Button("Remove Lecture");
         Button displayButton = new Button("Display Timetable");
@@ -39,7 +44,7 @@ public class TimetableApp extends Application {
         displayButton.setOnAction(e -> new DisplayTimetableView(primaryStage, this::showMainScreen));
         otherButton.setOnAction(e -> new OtherView(primaryStage, this::showMainScreen));
 
-        VBox buttonLayout = new VBox(10, addButton, removeButton, displayButton, otherButton);
+        VBox buttonLayout = new VBox(10, titleLabel, addButton, removeButton, displayButton, otherButton);
         buttonLayout.setPadding(new Insets(20));
         buttonLayout.setAlignment(Pos.CENTER);
 

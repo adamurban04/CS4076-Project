@@ -29,7 +29,7 @@ public class ClientHandler implements Runnable {
                 try {
                     response = RequestProcessor.processRequest(request, sharedTimetable);
                 } catch (IncorrectActionException e) {
-                    response = "ERROR: " + e.getMessage();
+                    throw new IncorrectActionException("ERROR: " + e.getMessage());
                 }
 
                 out.println(response);
@@ -38,7 +38,7 @@ public class ClientHandler implements Runnable {
                     break;
                 }
             }
-        } catch (IOException e) {
+        } catch (IOException | IncorrectActionException e) {
             e.printStackTrace();
         } finally {
             try {

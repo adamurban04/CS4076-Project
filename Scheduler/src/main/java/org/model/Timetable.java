@@ -31,7 +31,7 @@ public class Timetable {
             String room = parts[3].trim();
 
             if (isTimeSlotOccupied(date, time, room)) {
-                return "ERROR: Time slot occupied for " + room + " at " + time;
+                throw new IncorrectActionException("ERROR: Time slot occupied for " + room + " at " + time);
             }
 
             weeklyTimetable.get(date.getDayOfWeek().getValue() - 1).add(new Lecture(module, date, time, room)); //stores in timetable
