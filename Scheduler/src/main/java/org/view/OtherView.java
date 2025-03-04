@@ -1,5 +1,6 @@
 package org.view;
 
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -7,6 +8,9 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.controller.ClientConnection;
+import org.controller.ClientHandler;
+
+import java.io.IOException;
 
 public class OtherView {
     private final Stage stage;
@@ -21,6 +25,8 @@ public class OtherView {
     private void showOtherScreen() {
         Label instructionLabel = new Label("Click the button to send an invalid request:");
         Button sendButton = new Button("Send Invalid Request");
+        Button quitButton = new Button("STOP");
+
         Button backButton = new Button("Back");
         Label responseLabel = new Label();
 
@@ -29,9 +35,25 @@ public class OtherView {
             responseLabel.setText(response);
         });
 
+        quitButton.setOnAction(e -> {
+            try {
+                String response = ClientConnection.getInstance().sendRequest("STOP$Close");
+
+                if ("TERMINATE".equals(response)) {
+                    System.out.println("Client received TERMINATE, shutting down...");
+                    ClientConnection.getInstance().closeConnection();
+                    Platform.exit();
+                    System.exit(0);
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
+
+
         backButton.setOnAction(e -> onBack.run());
 
-        VBox layout = new VBox(10, instructionLabel, sendButton, backButton, responseLabel);
+        VBox layout = new VBox(10, instructionLabel, sendButton, backButton, quitButton, responseLabel);
         layout.setPadding(new Insets(20));
         layout.setAlignment(Pos.CENTER);
 

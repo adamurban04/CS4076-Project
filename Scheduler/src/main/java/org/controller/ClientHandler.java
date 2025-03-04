@@ -6,12 +6,11 @@ import org.model.Timetable;
 import java.net.Socket;
 import java.io.*;
 
-public class ClientHandler implements Runnable{
+public class ClientHandler implements Runnable {
     private final Socket socket;
-    private final Timetable sharedTimetable;  // final for objects means the reference cannot change
+    private final Timetable sharedTimetable;
 
-    public ClientHandler(Socket socket, Timetable timetable) {  //each client has socket and timetable
-        // timetable could be static, however in future for scalability we might want to have more timetables for more courses etc.
+    public ClientHandler(Socket socket, Timetable timetable) {
         this.socket = socket;
         this.sharedTimetable = timetable;
     }
@@ -21,7 +20,7 @@ public class ClientHandler implements Runnable{
         try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
              PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
 
-            String request; // important String variable for handling requests
+            String request;
             while ((request = in.readLine()) != null) {
                 System.out.println("Received Message: " + request);
 
@@ -33,11 +32,21 @@ public class ClientHandler implements Runnable{
                     response = "ERROR: " + e.getMessage();
                 }
 
-                out.println(response); // Send response to client
+                out.println(response);
+                if ("TERMINATE".equals(response)) {
+                    System.out.println("Closing client connection...");
+                    break;
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                socket.close();
+                System.out.println("Client socket closed.");
+            } catch (IOException e) {
+                System.err.println("Error closing socket: " + e.getMessage());
+            }
         }
     }
-
 }

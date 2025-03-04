@@ -23,7 +23,8 @@ public class ServerApp {
                 Socket clientSocket = serverSocket.accept(); // Accept client connection
                 System.out.println("Client connected: " + clientSocket.getInetAddress());
 
-                executorService.execute(new ClientHandler(clientSocket, timetable));    // Each client has instance of timetable
+                executorService.execute(new ClientHandler(clientSocket, timetable));
+                // Each client has instance of timetable
             }
 
         } catch (IOException e) {

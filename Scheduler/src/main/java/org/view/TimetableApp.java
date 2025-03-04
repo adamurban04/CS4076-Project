@@ -32,7 +32,7 @@ public class TimetableApp extends Application {
         Button addButton = new Button("Add Lecture");
         Button removeButton = new Button("Remove Lecture");
         Button displayButton = new Button("Display Timetable");
-        Button otherButton = new Button("Test Incorrect Action");
+        Button otherButton = new Button("Other");
 
         addButton.setOnAction(e -> new AddLectureView(primaryStage, this::showMainScreen));
         removeButton.setOnAction(e -> new RemoveLectureView(primaryStage, this::showMainScreen));
