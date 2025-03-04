@@ -33,11 +33,14 @@ public class Timetable {
             if (isTimeSlotOccupied(date, time, room)) {
                 throw new IncorrectActionException("ERROR: Time slot occupied for " + room + " at " + time);
             }
+            if (isTimeSlotFree(date, time)) {
+                throw new IncorrectActionException("ERROR: Time slot occupied by another lecture");
+            }
 
             weeklyTimetable.get(date.getDayOfWeek().getValue() - 1).add(new Lecture(module, date, time, room)); //stores in timetable
             return "Lecture added: " + module + " on " + date + " at " + time + " in " + room;
         } catch (Exception e) {
-            throw new IncorrectActionException("Invalid date/time format.");
+            throw new IncorrectActionException(e.getMessage());
         }
     }
 
@@ -94,6 +97,20 @@ public class Timetable {
         }
         return false;
     }
+
+    private boolean isTimeSlotFree(LocalDate date, LocalTime time) {
+        int dayIndex = date.getDayOfWeek().getValue() - 1;
+        for (Lecture lecture : weeklyTimetable.get(dayIndex)) {
+            if (lecture.getTime().equals(time)) {
+                return true;
+            }
+        }
+
+        return false;  // False if no lecture at that time, true if there is
+    }
+
+
+
 
 
 }
