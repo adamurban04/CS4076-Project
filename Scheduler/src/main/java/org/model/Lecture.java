@@ -38,11 +38,11 @@ public class Lecture {
 
     @Override
     public String toString() {
-        return "Lecture{" +
-                "module='" + module + '\'' +
-                ", date=" + date +
-                ", time=" + time +
-                ", room='" + room + '\'' +
+        return "{" +
+                "module=" + module +
+                ",date=" + date +
+                ",time=" + time +
+                ",room=" + room +
                 '}';
     }
 }

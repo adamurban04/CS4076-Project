@@ -1,8 +1,11 @@
 package org.controller;
 
+import javafx.application.Platform;
 import org.exceptions.IncorrectActionException;
 
 import org.model.Timetable;
+
+import java.io.IOException;
 
 public class RequestProcessor {
     public static String processRequest(String request, Timetable timetable) throws IncorrectActionException {
@@ -12,9 +15,11 @@ public class RequestProcessor {
         }
         String action = parts[0].trim();
         String details = parts[1].trim();
-
         try {
             switch (action) {
+                case "STOP":
+                    System.out.println("Server received STOP command.");
+                    return "TERMINATE";
                 case "Add":
                     return timetable.addLecture(details);
                 case "Remove":

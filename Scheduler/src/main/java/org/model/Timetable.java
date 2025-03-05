@@ -31,13 +31,16 @@ public class Timetable {
             String room = parts[3].trim();
 
             if (isTimeSlotOccupied(date, time, room)) {
-                return "ERROR: Time slot occupied for " + room + " at " + time;
+                throw new IncorrectActionException("ERROR: Time slot occupied for " + room + " at " + time);
+            }
+            if (isTimeSlotFree(date, time)) {
+                throw new IncorrectActionException("ERROR: Time slot occupied by another lecture");
             }
 
             weeklyTimetable.get(date.getDayOfWeek().getValue() - 1).add(new Lecture(module, date, time, room)); //stores in timetable
-            return "Lecture added for " + module + ".";
+            return "Lecture added: " + module + " on " + date + " at " + time + " in " + room;
         } catch (Exception e) {
-            throw new IncorrectActionException("Invalid date/time format.");
+            throw new IncorrectActionException(e.getMessage());
         }
     }
 
@@ -58,7 +61,7 @@ public class Timetable {
                 Lecture lecture = iterator.next();
                 if (lecture.getModule().equalsIgnoreCase(module) && lecture.getDate().equals(date) && lecture.getTime().equals(time)) {
                     iterator.remove();
-                    return "Lecture removed for " + module + ".";
+                    return "Lecture removed: " + module + " on " + date + " at " + time + " in " + room;
                 }
             }
             return "ERROR: Lecture not found.";
@@ -68,20 +71,29 @@ public class Timetable {
     }
 
     public synchronized String getSchedule() {
-        StringBuilder schedule = new StringBuilder("Scheduled Lectures: ");
+        StringBuilder schedule = new StringBuilder("Scheduled Lectures|");
         String[] weekdays = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
 
+        // Iterate over each weekday and display the lectures for that day
         for (int i = 0; i < 5; i++) {
-            schedule.append(weekdays[i]).append("|");
-            if (!weeklyTimetable.get(i).isEmpty()) {
+            // Check if the day has lectures scheduled
+            schedule.append(weekdays[i]);
+
+            if (weeklyTimetable.get(i).isEmpty()) {
+            }
+            else {
                 for (Lecture lecture : weeklyTimetable.get(i)) {
-                    schedule.append(lecture).append("|");
+                    schedule.append(lecture.toString()); // Format the lecture properly
                 }
             }
+            schedule.append("|");
         }
-        System.out.println(schedule.toString());
+
+        System.out.println(schedule);
+
         return schedule.toString();
     }
+
 
 
     private boolean isTimeSlotOccupied(LocalDate date, LocalTime time, String room) {
@@ -93,6 +105,20 @@ public class Timetable {
         }
         return false;
     }
+
+    private boolean isTimeSlotFree(LocalDate date, LocalTime time) {
+        int dayIndex = date.getDayOfWeek().getValue() - 1;
+        for (Lecture lecture : weeklyTimetable.get(dayIndex)) {
+            if (lecture.getTime().equals(time)) {
+                return true;
+            }
+        }
+
+        return false;  // False if no lecture at that time, true if there is
+    }
+
+
+
 
 
 }

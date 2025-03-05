@@ -7,7 +7,9 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import org.controller.ClientConnection;
+import org.exceptions.IncorrectActionException;
 
+import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -98,20 +100,20 @@ public class AddLectureView {
             String room = roomField.getText().trim();
 
             if (module.isEmpty() || date == null || time.isEmpty() || room.isEmpty()) {
-                return "Please fill all fields.";
+                throw new IncorrectActionException("Lecture details are missing or invalid.");
             }
 
             // Ensure the time is at a full hour
             LocalTime parsedTime = LocalTime.parse(time);
             if (parsedTime.getMinute() != 0) {
-                return "Invalid time. Must be a full hour (e.g., 10:00, 15:00).";
+                throw new IncorrectActionException("Invalid time format; must be full hour (e.g 12:00)");
             }
 
             String request = "Add$" + module + "," + date + "," + time + "," + room;
             return ClientConnection.getInstance().sendRequest(request); // Use persistent connection
 
-        } catch (Exception e) {
-            return "Error: Unable to send request.";
+        } catch (IncorrectActionException | IOException e) {
+            return e.getMessage();
         }
     }
 
