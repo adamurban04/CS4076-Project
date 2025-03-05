@@ -35,7 +35,7 @@ public class Timetable {
             }
 
             weeklyTimetable.get(date.getDayOfWeek().getValue() - 1).add(new Lecture(module, date, time, room)); //stores in timetable
-            return "Lecture added: " + module + " on " + date + " at " + time + " in " + room;
+            return "Lecture added for " + module + ".";
         } catch (Exception e) {
             throw new IncorrectActionException("Invalid date/time format.");
         }
@@ -58,7 +58,7 @@ public class Timetable {
                 Lecture lecture = iterator.next();
                 if (lecture.getModule().equalsIgnoreCase(module) && lecture.getDate().equals(date) && lecture.getTime().equals(time)) {
                     iterator.remove();
-                    return "Lecture removed: " + module + " on " + date + " at " + time + " in " + room;
+                    return "Lecture removed for " + module + ".";
                 }
             }
             return "ERROR: Lecture not found.";
@@ -68,19 +68,18 @@ public class Timetable {
     }
 
     public synchronized String getSchedule() {
-        StringBuilder schedule = new StringBuilder("Scheduled Lectures:\n");
+        StringBuilder schedule = new StringBuilder("Scheduled Lectures: ");
         String[] weekdays = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
 
         for (int i = 0; i < 5; i++) {
-            schedule.append(weekdays[i]).append(":\n");
-            if (weeklyTimetable.get(i).isEmpty()) {
-                schedule.append("  No lectures.\n");
-            } else {
+            schedule.append(weekdays[i]).append("|");
+            if (!weeklyTimetable.get(i).isEmpty()) {
                 for (Lecture lecture : weeklyTimetable.get(i)) {
-                    schedule.append("  ").append(lecture).append("\n");
+                    schedule.append(lecture).append("|");
                 }
             }
         }
+        System.out.println(schedule.toString());
         return schedule.toString();
     }
 

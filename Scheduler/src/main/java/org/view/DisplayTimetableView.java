@@ -49,7 +49,7 @@ public class DisplayTimetableView {
 
     private void updateTimetable() {
         try {
-            String response = ClientConnection.getInstance().sendRequest("Display$");
+            String response = ClientConnection.getInstance().sendRequest("Display$details");    //details have to be there
 
             timetableGrid.getChildren().clear(); // Clear previous timetable data
             displayTimetable(response);
@@ -61,6 +61,7 @@ public class DisplayTimetableView {
 
     private void displayTimetable(String timetableData) {
         String[] days = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
+        System.out.println(timetableData);
 
         // Set column headers for weekdays
         for (int i = 0; i < days.length; i++) {
