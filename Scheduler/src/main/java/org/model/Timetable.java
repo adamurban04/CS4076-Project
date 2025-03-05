@@ -71,21 +71,29 @@ public class Timetable {
     }
 
     public synchronized String getSchedule() {
-        StringBuilder schedule = new StringBuilder("Scheduled Lectures:\n");
+        StringBuilder schedule = new StringBuilder("Scheduled Lectures|");
         String[] weekdays = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
 
+        // Iterate over each weekday and display the lectures for that day
         for (int i = 0; i < 5; i++) {
-            schedule.append(weekdays[i]).append(":\n");
+            // Check if the day has lectures scheduled
+            schedule.append(weekdays[i]);
+
             if (weeklyTimetable.get(i).isEmpty()) {
-                schedule.append("  No lectures.\n");
-            } else {
+            }
+            else {
                 for (Lecture lecture : weeklyTimetable.get(i)) {
-                    schedule.append("  ").append(lecture).append("\n");
+                    schedule.append(lecture.toString()); // Format the lecture properly
                 }
             }
+            schedule.append("|");
         }
+
+        System.out.println(schedule);
+
         return schedule.toString();
     }
+
 
 
     private boolean isTimeSlotOccupied(LocalDate date, LocalTime time, String room) {

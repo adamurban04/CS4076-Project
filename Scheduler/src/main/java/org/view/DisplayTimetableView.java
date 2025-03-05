@@ -49,7 +49,7 @@ public class DisplayTimetableView {
 
     private void updateTimetable() {
         try {
-            String response = ClientConnection.getInstance().sendRequest("Display$");
+            String response = ClientConnection.getInstance().sendRequest("Display$details");
 
             timetableGrid.getChildren().clear(); // Clear previous timetable data
             displayTimetable(response);
@@ -73,15 +73,15 @@ public class DisplayTimetableView {
         }
 
         // Parse response and add lectures to the correct positions
-        String[] lines = timetableData.split("\n");
+        String[] lines = timetableData.split("|");
         int currentDayIndex = -1;
 
         for (String line : lines) {
-            if (line.endsWith(":")) { // Detecting a new day section (e.g., "Monday:")
+            if (line.endsWith("|")) { // Detecting a new day section (e.g., "Monday:")
                 currentDayIndex = getDayIndex(line.replace(":", "").trim());
             } else if (currentDayIndex != -1 && line.trim().length() > 0) {
                 // Extracting lecture details
-                String[] lectureParts = line.trim().split(",");
+                String[] lectureParts = line.trim().split("=");
                 if (lectureParts.length >= 3) {
                     String module = lectureParts[0].trim();
                     String time = lectureParts[1].trim();
