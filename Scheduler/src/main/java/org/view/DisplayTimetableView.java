@@ -60,41 +60,67 @@ public class DisplayTimetableView {
     }
 
     private void displayTimetable(String timetableData) {
+        String[] parts = timetableData.split("\\|");
+
+        if (parts.length < 6) { // Expecting "Scheduled Lectures | Monday | ... | Friday |"
+            timetableGrid.add(new Label("Invalid timetable format."), 0, 0);
+            return;
+        }
+
         String[] days = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
 
-        // Set column headers for weekdays
+        // Set column headers
         for (int i = 0; i < days.length; i++) {
-            timetableGrid.add(new Label(days[i]), i + 1, 0); // Column headers
+            timetableGrid.add(new Label(days[i]), i + 1, 0);
         }
 
-        // Set row headers for time slots (09:00 - 17:00)
+        // Set row headers for time slots (09:00 - 18:00)
         for (int hour = 9; hour <= 18; hour++) {
-            timetableGrid.add(new Label(hour + ":00"), 0, hour - 8); // Row headers
+            timetableGrid.add(new Label(hour + ":00"), 0, hour - 8);
         }
 
-        // Parse response and add lectures to the correct positions
-        String[] lines = timetableData.split("|");
-        int currentDayIndex = -1;
+        for (int i = 1; i < parts.length; i++) { // Skip "Scheduled Lectures" at index 0
+            String day = days[i - 1]; // Map index to actual day
+            String lectures = parts[i].trim();
 
-        for (String line : lines) {
-            if (line.endsWith("|")) { // Detecting a new day section (e.g., "Monday:")
-                currentDayIndex = getDayIndex(line.replace(":", "").trim());
-            } else if (currentDayIndex != -1 && line.trim().length() > 0) {
-                // Extracting lecture details
-                String[] lectureParts = line.trim().split("=");
-                if (lectureParts.length >= 3) {
-                    String module = lectureParts[0].trim();
-                    String time = lectureParts[1].trim();
+            if (lectures.startsWith("{") && lectures.endsWith("}")) {
+                lectures = lectures.substring(1, lectures.length() - 1); // Remove `{}`
 
+                String[] lectureDetails = lectures.split(",");
+
+                String module = null, time = null, room = null;
+
+                for (String detail : lectureDetails) {
+                    String[] keyValue = detail.split("=");
+                    if (keyValue.length == 2) {
+                        String key = keyValue[0].trim();
+                        String value = keyValue[1].trim();
+
+                        switch (key) {
+                            case "module":
+                                module = value;
+                                break;
+                            case "time":
+                                time = value;
+                                break;
+                            case "room":
+                                room = value;
+                                break;
+                        }
+                    }
+                }
+
+                if (module != null && time != null) {
                     try {
                         int hour = Integer.parseInt(time.split(":")[0]); // Extract hour
-                        timetableGrid.add(new Label(module), currentDayIndex + 1, hour - 8);
-                    } catch (Exception ignored) {
+                        timetableGrid.add(new Label(module + " (" + room + ")"), i, hour - 8);
+                    } catch (NumberFormatException ignored) {
                     }
                 }
             }
         }
     }
+
 
     private int getDayIndex(String day) {
         switch (day) {

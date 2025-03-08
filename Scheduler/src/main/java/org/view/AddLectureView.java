@@ -99,9 +99,44 @@ public class AddLectureView {
             String time = timeField.getText().trim();
             String room = roomField.getText().trim();
 
-            if (module.isEmpty() || date == null || time.isEmpty() || room.isEmpty()) {
+            if (module.isEmpty() && date == null && time.isEmpty() && room.isEmpty()) {
                 throw new IncorrectActionException("Lecture details are missing or invalid.");
             }
+
+            else if (module.isEmpty()) {
+                throw new IncorrectActionException("Please input module code.");
+            }
+            else if ( date == null ) {
+                throw new IncorrectActionException("Please select a date.");
+            }
+            else if (time.isEmpty()) {
+                throw new IncorrectActionException("Please select a time.");
+            }
+            else if ( room.isEmpty()) {
+                throw new IncorrectActionException("Please select a room.");
+            }
+
+            if (module.length() != 6) {
+                throw new IncorrectActionException("Module code must be 6 chars long.");
+            }
+
+            String firstTwoChars = module.substring(0, 2);
+            if (!Character.isLetter(firstTwoChars.charAt(0)) || !Character.isLetter(firstTwoChars.charAt(1))) {
+                throw new IncorrectActionException("First two chars of module code must be letters");
+            }
+
+            String lastFourChars = module.substring(2, 6);
+            if (lastFourChars.length() != 4) {
+                throw new IncorrectActionException("Last four chars of module must be 4 digits.");
+            }
+
+            for (int i = 0; i < lastFourChars.length(); i++) {
+                char currentChar = lastFourChars.charAt(i);
+                if (!Character.isDigit(currentChar)) {
+                    throw new IncorrectActionException("Last four chars of module must be numbers");
+                }
+            }
+
 
             // Ensure the time is at a full hour
             LocalTime parsedTime = LocalTime.parse(time);
