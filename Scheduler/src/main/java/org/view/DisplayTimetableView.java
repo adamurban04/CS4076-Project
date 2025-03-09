@@ -34,7 +34,7 @@ public class DisplayTimetableView {
         timetableGrid.setVgap(10);
         timetableGrid.setAlignment(Pos.CENTER);
 
-        Button refreshButton = createButton("Refresh", "#2C7A7B");
+        Button refreshButton = createButton("Refresh", "#537b2c");
         Button backButton = createButton("Back", "#e27e3d");
 
         refreshButton.setOnAction(e -> updateTimetable());

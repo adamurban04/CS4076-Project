@@ -6,6 +6,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
 import java.util.Iterator;
+import java.io.FileWriter;
+import java.io.IOException;
 
 
 public class Timetable {
@@ -115,6 +117,25 @@ public class Timetable {
         }
 
         return false;  // False if no lecture at that time, true if there is
+    }
+
+    public synchronized void exportToCSV(String filePath) throws IOException {
+        try (FileWriter writer = new FileWriter(filePath)) {
+            // header
+            writer.write("Module,Date,Time,Room\n");
+
+            // timetable data
+            for (ArrayList<Lecture> dayLectures : weeklyTimetable) {
+                for (Lecture lecture : dayLectures) {
+                    writer.write(
+                            lecture.getModule() + "," +
+                                    lecture.getDate() + "," +
+                                    lecture.getTime() + "," +
+                                    lecture.getRoom() + "\n"
+                    );
+                }
+            }
+        }
     }
 
 
