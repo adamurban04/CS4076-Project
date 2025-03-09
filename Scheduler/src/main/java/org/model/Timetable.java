@@ -38,7 +38,7 @@ public class Timetable {
             }
 
             weeklyTimetable.get(date.getDayOfWeek().getValue() - 1).add(new Lecture(module, date, time, room)); //stores in timetable
-            return "Lecture added: " + module + " on " + date + " at " + time + " in " + room;
+            return "Lecture added.";
         } catch (Exception e) {
             throw new IncorrectActionException(e.getMessage());
         }
@@ -61,7 +61,7 @@ public class Timetable {
                 Lecture lecture = iterator.next();
                 if (lecture.getModule().equalsIgnoreCase(module) && lecture.getDate().equals(date) && lecture.getTime().equals(time)) {
                     iterator.remove();
-                    return "Lecture removed: " + module + " on " + date + " at " + time + " in " + room;
+                    return "Lecture removed.";
                 }
             }
             return "ERROR: Lecture not found.";

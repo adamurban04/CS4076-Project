@@ -40,7 +40,7 @@ public class DisplayTimetableView {
         layout.setPadding(new Insets(20));
         layout.setAlignment(Pos.CENTER);
 
-        Scene scene = new Scene(layout, 600, 500);
+        Scene scene = new Scene(layout, 700, 500);
         stage.setScene(scene);
         stage.setTitle("Display Timetable");
 
