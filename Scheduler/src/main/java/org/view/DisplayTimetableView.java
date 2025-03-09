@@ -6,7 +6,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -50,14 +49,14 @@ public class DisplayTimetableView {
         stage.setScene(scene);
         stage.setTitle("Display Timetable");
 
-        updateTimetable(); // Load timetable on start
+        updateTimetable(); // load timetable on start
     }
 
     private void updateTimetable() {
         try {
             String response = ClientConnection.getInstance().sendRequest("Display$details");
 
-            timetableGrid.getChildren().clear(); // Clear previous timetable data
+            timetableGrid.getChildren().clear(); // clear previous timetable data
             displayTimetable(response);
         } catch (Exception e) {
             timetableGrid.getChildren().clear();
@@ -68,32 +67,32 @@ public class DisplayTimetableView {
     private void displayTimetable(String timetableData)  {
         String[] parts = timetableData.split("\\|");
 
-        if (parts.length < 6) { // Expecting "Scheduled Lectures | Monday | ... | Friday |"
+        if (parts.length < 6) { //  "Scheduled Lectures | Monday | ... | Friday |"
             timetableGrid.add(new Label("Invalid timetable format."), 0, 0);
             return;
         }
 
         String[] days = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
 
-        // Set column headers (days)
+        // set column headers (days)
         for (int i = 0; i < days.length; i++) {
             Label dayLabel = new Label(days[i]);
             dayLabel.setStyle("-fx-font-weight: bold;");
             timetableGrid.add(dayLabel, i + 1, 0);
         }
 
-        // Set row headers (09:00 - 18:00)
+        // set row headers (09:00 - 18:00)
         for (int hour = 9; hour <= 18; hour++) {
             Label timeLabel = new Label(hour + ":00");
             timeLabel.setStyle("-fx-font-weight: bold;");
             timetableGrid.add(timeLabel, 0, hour - 8);
         }
 
-        // Process each day's lectures
+        // for each day's lectures
         for (int i = 1; i < parts.length; i++) { // skip "Scheduled Lectures" at index 0
             String dayLectures = parts[i].trim();
 
-            // Skip if no lectures for this day
+            // skip if no lectures for the day
             if (!dayLectures.contains("{")) {
                 Label noLecturesLabel = new Label("No lectures");
                 noLecturesLabel.setStyle("-fx-text-fill: #808080;"); // Grayish color
@@ -101,14 +100,14 @@ public class DisplayTimetableView {
                 continue;
             }
 
-            // Split individual lectures for the day
+            // split lectures for a specific day
             String[] lectures = dayLectures.split("\\{");
             for (String lecture : lectures) {
                 if (lecture.trim().isEmpty()) {
-                    continue; // Skip empty entries
+                    continue;
                 }
 
-                // Remove trailing '}' and extract lecture details
+                // remove ending } and extract lecture details
                 lecture = lecture.replace("}", "").trim();
                 String[] lectureDetails = lecture.split(",");
 
