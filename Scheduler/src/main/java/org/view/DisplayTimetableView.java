@@ -22,7 +22,8 @@ public class DisplayTimetableView {
     }
 
     private void showDisplayTimetableScreen() {
-        Label instructionLabel = new Label("Weekly Lecture Timetable:");
+        Label titleLabel = new Label("Weekly Lecture Timetable");
+        titleLabel.setStyle("-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #2C3E50;");
 
         timetableGrid = new GridPane();
         timetableGrid.setPadding(new Insets(10));
@@ -30,13 +31,13 @@ public class DisplayTimetableView {
         timetableGrid.setVgap(10);
         timetableGrid.setAlignment(Pos.CENTER);
 
-        Button refreshButton = new Button("Refresh");
-        Button backButton = new Button("Back");
+        Button refreshButton = createButton("Refresh", "#2C7A7B");
+        Button backButton = createButton("Back", "#e27e3d");
 
         refreshButton.setOnAction(e -> updateTimetable());
         backButton.setOnAction(e -> onBack.run());
 
-        VBox layout = new VBox(10, instructionLabel, timetableGrid, refreshButton, backButton);
+        VBox layout = new VBox(10, titleLabel, timetableGrid, refreshButton, backButton);
         layout.setPadding(new Insets(20));
         layout.setAlignment(Pos.CENTER);
         layout.setStyle("-fx-background-color: #F0F4F8; -fx-border-radius: 10px; -fx-background-radius: 10px;");
@@ -138,5 +139,14 @@ public class DisplayTimetableView {
             default:
                 return -1;
         }
+    }
+
+    private Button createButton(String text, String color) {
+        Button button = new Button(text);
+        button.setStyle("-fx-background-color: " + color + "; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10px 20px; -fx-border-radius: 5px;");
+        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: " + color + "; -fx-text-fill: black; -fx-font-weight: bold; -fx-padding: 10px 20px; -fx-border-radius: 5px;"));
+        button.setOnMouseExited(e -> button.setStyle("-fx-background-color: " + color + "; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10px 20px; -fx-border-radius: 5px;"));
+
+        return button;
     }
 }
