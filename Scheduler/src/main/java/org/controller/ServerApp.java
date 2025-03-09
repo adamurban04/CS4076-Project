@@ -8,7 +8,7 @@ import java.util.concurrent.Executors;
 
 // Server side for TCP Connection between clients and the server
 
-public class    ServerApp {
+public class ServerApp {
     private static final int PORT = 1234;
     private static final int MAX_CLIENTS = 10;
     private static Timetable timetable = new Timetable();

@@ -26,11 +26,7 @@ public class ClientHandler implements Runnable {
 
                 // Process request
                 String response;
-                try {
-                    response = RequestProcessor.processRequest(request, sharedTimetable);
-                } catch (IncorrectActionException e) {
-                    throw new IncorrectActionException("ERROR: " + e.getMessage());
-                }
+                response = RequestProcessor.processRequest(request, sharedTimetable);
 
                 out.println(response);
                 if ("TERMINATE".equals(response)) {
@@ -38,8 +34,10 @@ public class ClientHandler implements Runnable {
                     break;
                 }
             }
-        } catch (IOException | IncorrectActionException e) {
+        } catch (IOException e) {
             e.printStackTrace();
+        } catch (IncorrectActionException e) {
+            throw new RuntimeException(e);
         } finally {
             try {
                 socket.close();

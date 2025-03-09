@@ -7,10 +7,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.controller.ClientConnection;
+
+import java.io.File;
 
 
 public class DisplayTimetableView {
@@ -36,15 +40,64 @@ public class DisplayTimetableView {
 
         Button refreshButton = createButton("Refresh", "#537b2c");
         Button backButton = createButton("Back", "#e27e3d");
+        Button exportButton = createButton("Export CSV", "#2C7A7B");
+        Button importButton = createButton("Import CSV", "#2C7A7B");
 
         refreshButton.setOnAction(e -> updateTimetable());
         backButton.setOnAction(e -> onBack.run());
 
-        VBox layout = new VBox(10, titleLabel, timetableGrid, refreshButton, backButton);
+        exportButton.setOnAction(e -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Save Timetable as CSV");
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+            File file = fileChooser.showSaveDialog(stage);
+
+            if (file != null) {
+                String filePath = file.getAbsolutePath();
+                try {
+                    String response = ClientConnection.getInstance().sendRequest("ExportCSV$" + filePath);
+                    System.out.println(response);
+                } catch (Exception ex) {
+                    System.out.println(("Error exporting timetable: " + ex.getMessage()));
+                }
+            }
+        });
+
+        importButton.setOnAction(e -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Load Timetable from CSV");
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+            File file = fileChooser.showOpenDialog(stage);
+
+            if (file != null) {
+                String filePath = file.getAbsolutePath();
+                try {
+                    String response = ClientConnection.getInstance().sendRequest("ImportCSV$" + filePath);
+                    updateTimetable(); // refresh the displayed timetable
+                    System.out.println(response);
+                } catch (Exception ex) {
+                    System.out.println("Error importing timetable: " + ex.getMessage());
+                }
+            }
+        });
+
+        // info text about hover effect
+        Label infoLabel = new Label("(Hover over a module to see the room code)");
+        infoLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #808080;");
+
+        // group Refresh and Back in an HBox
+        HBox refreshBackBox = new HBox(10, refreshButton, backButton);
+        refreshBackBox.setAlignment(Pos.CENTER);
+
+        // group Export and Import in an HBox
+        HBox exportImportBox = new HBox(10, exportButton, importButton);
+        exportImportBox.setAlignment(Pos.CENTER);
+
+        // main layout
+        VBox layout = new VBox(10, titleLabel, timetableGrid, infoLabel, exportImportBox, refreshBackBox);
         layout.setPadding(new Insets(20));
         layout.setAlignment(Pos.CENTER);
         layout.setStyle("-fx-background-color: #F0F4F8; -fx-border-radius: 10px; -fx-background-radius: 10px;");
-
         Scene scene = new Scene(layout, 700, 500);
         stage.setScene(scene);
         stage.setTitle("Display Timetable");
@@ -190,4 +243,6 @@ public class DisplayTimetableView {
 
         return button;
     }
+
+
 }
