@@ -56,6 +56,7 @@ public class OtherView {
         VBox layout = new VBox(10, instructionLabel, sendButton, backButton, quitButton, responseLabel);
         layout.setPadding(new Insets(20));
         layout.setAlignment(Pos.CENTER);
+        layout.setStyle("-fx-background-color: #F0F4F8; -fx-border-radius: 10px; -fx-background-radius: 10px;");
 
         Scene scene = new Scene(layout, 700, 500);
         stage.setScene(scene);
