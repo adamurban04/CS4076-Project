@@ -20,11 +20,11 @@ public class ServerApp {
             System.out.println("Server is running on port: " + PORT);
 
             while (true) {
-                Socket clientSocket = serverSocket.accept(); // Accept client connection
+                Socket clientSocket = serverSocket.accept(); // accept client connection
                 System.out.println("Client connected: " + clientSocket.getInetAddress());
 
                 executorService.execute(new ClientHandler(clientSocket, timetable));
-                // Each client has instance of timetable
+                //each client has instance of timetable (handles multiple clients, set max to 10)
             }
 
         } catch (IOException e) {

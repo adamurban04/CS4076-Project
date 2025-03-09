@@ -188,13 +188,12 @@ public class DisplayTimetableView {
 
                 if (module != null && time != null) {
                     try {
-                        int hour = Integer.parseInt(time.split(":")[0]); // Extract hour
+                        int hour = Integer.parseInt(time.split(":")[0]); // get hour
 
-                        // Create a label for the module
                         Label moduleLabel = new Label(module);
                         moduleLabel.setStyle("-fx-text-fill: #2C3E50;");
 
-                        // Add hover effect with animations
+                        // hover effect with animations
                         if (room != null) {
 
                             FadeTransition fadeOut = new FadeTransition(Duration.millis(200), moduleLabel);
@@ -205,7 +204,7 @@ public class DisplayTimetableView {
                             fadeIn.setFromValue(0.0);
                             fadeIn.setToValue(1.0);
 
-                            // On hover: change to room code
+                            // On hover- change to room code
                             String finalRoom = room;
                             moduleLabel.setOnMouseEntered(e -> {
                                 fadeOut.setOnFinished(event -> {
@@ -215,7 +214,7 @@ public class DisplayTimetableView {
                                 fadeOut.play();
                             });
 
-                            // On exit: change to module code
+                            // On exit- change to module code
                             String finalModule = module;
                             moduleLabel.setOnMouseExited(e -> {
                                 fadeOut.setOnFinished(event -> {

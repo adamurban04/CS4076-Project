@@ -19,7 +19,7 @@ public class Timetable {
     public Timetable() {
         weeklyTimetable = new ArrayList<>(5);
         for (int i = 0; i < 5; i++) {
-            weeklyTimetable.add(new ArrayList<>());  // Create empty lists for each day
+            weeklyTimetable.add(new ArrayList<>());  // create empty lists for each day
         }
     }
 
