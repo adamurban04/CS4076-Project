@@ -49,7 +49,7 @@ public class AddLectureView {
         });
 
         Button addLectureButton = createButton("Add Lecture", "#2C7A7B");  // Deep teal
-        Button backButton = createButton("Back", "#E76F51");  // Soft red-orange
+        Button backButton = createButton("Back", "#e27e3d");  // Soft red-orange
 
         responseLabel = new Label();
         responseLabel.setWrapText(true);
