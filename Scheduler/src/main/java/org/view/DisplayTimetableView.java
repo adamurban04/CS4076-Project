@@ -86,7 +86,7 @@ public class DisplayTimetableView {
         infoLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #808080;");
 
         // group Refresh and Back in an HBox
-        HBox refreshBackBox = new HBox(10, refreshButton, backButton);
+        HBox refreshBackBox = new HBox(10, backButton, refreshButton);
         refreshBackBox.setAlignment(Pos.CENTER);
 
         // group Export and Import in an HBox
